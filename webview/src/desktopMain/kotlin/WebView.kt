@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * A wrapper around the Android View WebView to provide a basic WebView composable.
+ * A wrapper around the JavaFx WebView to provide a basic WebView composable.
  *
  * If you require more customisation you are most likely better rolling your own and using this
  * wrapper as an example.

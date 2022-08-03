@@ -32,10 +32,8 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "ComposeDesktopTodo"
+            packageName = "ComposeDesktopWebView"
             packageVersion = "1.0.0"
-
-            modules("java.sql")
 
             windows {
                 menuGroup = "Compose Examples"

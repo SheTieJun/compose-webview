@@ -5,17 +5,10 @@
 2. [JavaFx](https://openjfx.io) - JavaFX is an open source, next generation client application platform for
    desktop, mobile and embedded systems built on Java
 
-### 1. how to use
-
+### 1. how to use it
 ```kotlin
-val state = rememberWebViewState("https://example.com")
-
-WebView(
-    state
-)
+implementation(project(":webview"))
 ```
-
-### 2. Android And Desktop
 
 load url
 ```kotlin
