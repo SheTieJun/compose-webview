@@ -15,6 +15,29 @@ There are multiple modules:
 - `:android` - Android application
 - `:desktop` - Desktop application
 
+use in Android And Desktop
+
+1. load url
+```kotlin
+val webViewState = rememberWebViewState("https://example.com")
+WebView(
+    state = webViewState,
+    modifier = Modifier.fillMaxSize(),
+    navigator = rememberWebViewNavigator()
+
+)
+```
+2. load data
+```kotlin
+val webViewState = rememberWebViewStateWithHTMLData("test")
+WebView(
+    state = webViewState,
+    modifier = Modifier.fillMaxSize(),
+    navigator = rememberWebViewNavigator()
+)
+```
+
+
 thanks https://google.github.io/accompanist/web/
 
 ![](image/wepapp_Compose.jpg)

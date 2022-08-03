@@ -5,7 +5,7 @@
 2. [JavaFx](https://openjfx.io) - JavaFX is an open source, next generation client application platform for
    desktop, mobile and embedded systems built on Java
 
-## 如何使用
+### 1. how to use
 
 ```kotlin
 val state = rememberWebViewState("https://example.com")
@@ -15,7 +15,7 @@ WebView(
 )
 ```
 
-### 1. Android And Desktop
+### 2. Android And Desktop
 
 load url
 ```kotlin
@@ -29,7 +29,7 @@ WebView(
 ```
 load data
 ```kotlin
-val webViewState = rememberWebViewStateWithHTMLData("测试")
+val webViewState = rememberWebViewStateWithHTMLData("test")
 WebView(
     state = webViewState,
     modifier = Modifier.fillMaxSize(),
