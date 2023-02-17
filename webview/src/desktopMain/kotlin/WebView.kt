@@ -30,12 +30,14 @@ import javafx.application.Platform
 import javafx.concurrent.Worker.State.*
 import javafx.embed.swing.JFXPanel
 import javafx.scene.Scene
+import javafx.scene.layout.StackPane
 import javafx.scene.web.WebView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 /**
  * A wrapper around the JavaFx WebView to provide a basic WebView composable.
@@ -73,37 +75,45 @@ internal fun WebView(
     }
 
     SwingPanel(factory = {
-        JFXPanel()
-    }, modifier = modifier) { jfxP ->
-        Platform.runLater {
-            val rootVewView = WebView()
-            webView = rootVewView
-            onCreated.invoke(rootVewView)
-            addEngineListener(rootVewView, state, navigator)
-            val scene = Scene(rootVewView)
-            jfxP.scene = scene
-            when (val content = state.content) {
-                is WebContent.Url -> {
-                    val url = content.url
+        JFXPanel().also {jfxP ->
+            Platform.runLater {
+                val rootVewView = WebView()
+                webView = rootVewView
+                rootVewView.isVisible = true
+                val root = StackPane()
+                root.children.add(webView)
+                val scene = Scene(root)
+                onCreated.invoke(rootVewView)
+                addEngineListener(rootVewView, state, navigator)
+                when (val content = state.content) {
+                    is WebContent.Url -> {
+                        val url = content.url
 
-                    if (url.isNotEmpty() && url != rootVewView.getCurrentUrl()) {
-                        rootVewView.load(url)
+                        if (url.isNotEmpty() && url != rootVewView.getCurrentUrl()) {
+                            rootVewView.load(url)
+                        }
+                    }
+                    is WebContent.Data -> {
+                        rootVewView.loadContent(content.data)
                     }
                 }
-                is WebContent.Data -> {
-                    rootVewView.loadContent(content.data)
-                }
+                jfxP.scene = scene
             }
         }
+    }, modifier = modifier) { jfxP ->
+
     }
 }
 
-private fun addEngineListener(
+
+
+  fun addEngineListener(
     root: WebView,
     state: WebViewState,
     navigator: WebViewNavigator
 ) {
     val engine = root.engine
+    webEngine = engine
     engine.loadWorker.exceptionProperty().addListener { _, _, newError ->
         println("page load error : $newError")
         state.errorsForCurrentRequest.add(
@@ -151,14 +161,11 @@ private fun addEngineListener(
                 state.loadingState = Loading(0f)
             }
             CANCELLED -> {
-
             }
-            READY, SCHEDULED -> {
+            READY,SCHEDULED ->{
                 state.loadingState = Initializing
                 state.errorsForCurrentRequest.clear()
-                state.pageTitle = null
             }
-
         }
     }
 }
@@ -200,7 +207,7 @@ actual class WebViewState actual constructor(webContent: WebContent) {
      * Whether the WebView is currently [LoadingState.Loading] data in its main frame (along with
      * progress) or the data loading has [LoadingState.Finished]. See [LoadingState]
      */
-    var loadingState: LoadingState by mutableStateOf(LoadingState.Initializing)
+    var loadingState: LoadingState by mutableStateOf(LoadingState.Finished)
         internal set
 
     /**

@@ -8,7 +8,7 @@ development environment
 - Android Studio Chipmunk | 2021.2.1 Patch 1
 - Java 11
 - kotlin.version=1.6.10
-- compose.version=1.1.1
+- compose.version=1.3.0
 
 There are multiple modules:
 - `:webview` - - Shared WebView Compose UI for Android( Android WebView) and Desktop(JavaFX WebView)
