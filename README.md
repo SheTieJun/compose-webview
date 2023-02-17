@@ -6,7 +6,7 @@ Libraries used:
 
 development environment 
 - Android Studio Chipmunk | 2021.2.1 Patch 1
-- Java 11
+- Java 16 (JDK version  must be greater than 15 When Release desktop App)
 - kotlin.version=1.6.10
 - compose.version=1.3.0
 
@@ -38,6 +38,10 @@ WebView(
 ```
 
 
-thanks https://google.github.io/accompanist/web/
+thanks **https://google.github.io/accompanist/web/ **
+
+### [**Q&A**](doc/Q&A.md)
 
 ![](image/wepapp_Compose.jpg)
+
+
