@@ -18,6 +18,8 @@ kotlin {
 
         named("commonMain") {
             dependencies {
+                implementation( "androidx.datastore:datastore-preferences-core:1.1.0-alpha01")
+                implementation("androidx.datastore:datastore-core-jvm:1.1.0-alpha01")
             }
         }
 
@@ -37,6 +39,7 @@ kotlin {
                 api("org.openjfx:javafx-web:$jdkVersion:${platform}")
                 api("org.openjfx:javafx-swing:$jdkVersion:${platform}")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             }
         }
     }

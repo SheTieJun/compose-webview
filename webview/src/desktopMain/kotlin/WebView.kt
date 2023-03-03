@@ -33,10 +33,8 @@ import javafx.scene.Scene
 import javafx.scene.layout.StackPane
 import javafx.scene.web.WebView
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 /**
@@ -75,7 +73,7 @@ internal fun WebView(
     }
 
     SwingPanel(factory = {
-        JFXPanel().also {jfxP ->
+        JFXPanel().also { jfxP ->
             Platform.runLater {
                 val rootVewView = WebView()
                 webView = rootVewView
@@ -90,6 +88,7 @@ internal fun WebView(
                         val url = content.url
 
                         if (url.isNotEmpty() && url != rootVewView.getCurrentUrl()) {
+                            rootVewView.setCookie(url)
                             rootVewView.load(url)
                         }
                     }
@@ -106,14 +105,12 @@ internal fun WebView(
 }
 
 
-
-  fun addEngineListener(
-    root: WebView,
+fun addEngineListener(
+    webView: WebView,
     state: WebViewState,
     navigator: WebViewNavigator
 ) {
-    val engine = root.engine
-    webEngine = engine
+    val engine = webView.engine
     engine.loadWorker.exceptionProperty().addListener { _, _, newError ->
         println("page load error : $newError")
         state.errorsForCurrentRequest.add(
@@ -124,7 +121,7 @@ internal fun WebView(
         )
     }
     engine.setOnError { error -> println("onError : $error") }
-    engine.loadWorker.titleProperty().addListener { observable, oldValue, newValue ->
+    engine.titleProperty().addListener { observable, oldValue, newValue ->
         println("page load titleProperty : $newValue")
         state.pageTitle = newValue
     }
@@ -154,6 +151,7 @@ internal fun WebView(
                 state.loadingState = Finished
                 navigator.canGoBack = engine.canGoBack()
                 navigator.canGoForward = engine.canGoForward()
+                webView.getCookies()
             }
             FAILED -> {
             }
@@ -162,7 +160,7 @@ internal fun WebView(
             }
             CANCELLED -> {
             }
-            READY,SCHEDULED ->{
+            READY, SCHEDULED -> {
                 state.loadingState = Initializing
                 state.errorsForCurrentRequest.clear()
             }
@@ -245,22 +243,20 @@ actual class WebViewNavigator actual constructor(private val coroutineScope: Cor
 
     // Use Dispatchers.Main to ensure that the webview methods are called on UI thread
     internal suspend fun WebView.handleNavigationEvents() {
-        withContext(Dispatchers.Main) {
-            navigationEvents.collect { event ->
-                when (event) {
-                    NavigationEvent.BACK -> {
-                        if (canGoBack) {
-                            engine.goBack()
-                        }
+        navigationEvents.collect { event ->
+            when (event) {
+                NavigationEvent.BACK -> {
+                    if (canGoBack) {
+                        engine.goBack()
                     }
-                    NavigationEvent.FORWARD -> {
-                        if (canGoForward) {
-                            engine.goForward()
-                        }
-                    }
-                    NavigationEvent.RELOAD -> engine.reload()
-                    NavigationEvent.STOP_LOADING -> engine.stopLoading()
                 }
+                NavigationEvent.FORWARD -> {
+                    if (canGoForward) {
+                        engine.goForward()
+                    }
+                }
+                NavigationEvent.RELOAD -> engine.reload()
+                NavigationEvent.STOP_LOADING -> engine.stopLoading()
             }
         }
     }

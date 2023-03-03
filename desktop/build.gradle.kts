@@ -12,7 +12,9 @@ kotlin {
 
     jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "11"
+            this.kotlinOptions {
+                jvmTarget = "11"
+            }
         }
 
         withJava()
@@ -52,17 +54,18 @@ compose.desktop {
 //            macOS {
 //                iconFile.set(project.file("icon.icns"))
 //            }
-//            windows {
-//                iconFile.set(project.file("icon.ico"))
-//            }
+            windows {
+                iconFile.set(project.file("logo.ico"))
+                dirChooser = true
+            }
 //            linux {
 //                iconFile.set(project.file("icon.png"))
 //            }
-            windows {
-                menuGroup = "Compose Examples"
-                // see https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
-                upgradeUuid = "BF9CDA6A-1391-46D5-9ED5-383D6E68CCEE"
-            }
+//            windows {
+//                menuGroup = "Compose Examples"
+//                // see https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
+//                upgradeUuid = "BF9CDA6A-1391-46D5-9ED5-383D6E68CCEE"
+//            }
         }
     }
 }

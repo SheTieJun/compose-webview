@@ -42,3 +42,5 @@ bin/
 .DS_Store
 /local.properties
 /.idea/*
+/dataStoreWeb.preferences_pb
+/wix311/
