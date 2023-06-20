@@ -18,8 +18,6 @@ kotlin {
 
         named("commonMain") {
             dependencies {
-                implementation( "androidx.datastore:datastore-preferences-core:1.1.0-alpha01")
-                implementation("androidx.datastore:datastore-core-jvm:1.1.0-alpha01")
             }
         }
 

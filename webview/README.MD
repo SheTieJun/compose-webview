@@ -30,4 +30,12 @@ WebView(
 )
 ```
 
- 
+setCookie
+```kotlin
+ CookieManagerCompat.setCookie(url: String, headers: HashMap<String, String>) 
+```
+
+getCookie
+```kotlin
+ CookieManagerCompat.getCookie(url: String) 
+```

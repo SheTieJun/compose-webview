@@ -88,7 +88,6 @@ internal fun WebView(
                         val url = content.url
 
                         if (url.isNotEmpty() && url != rootVewView.getCurrentUrl()) {
-                            rootVewView.setCookie(url)
                             rootVewView.load(url)
                         }
                     }
@@ -144,22 +143,18 @@ fun addEngineListener(
     }
 
     engine.loadWorker.stateProperty().addListener { _, _, newState ->
-        println("page load stateProperty : $newState")
         //SCHEDULED ->RUNNING
         when (newState) {
             SUCCEEDED -> {
                 state.loadingState = Finished
                 navigator.canGoBack = engine.canGoBack()
                 navigator.canGoForward = engine.canGoForward()
-                webView.getCookies()
             }
-            FAILED -> {
-            }
+            FAILED -> {}
             RUNNING -> {
                 state.loadingState = Loading(0f)
             }
-            CANCELLED -> {
-            }
+            CANCELLED -> {}
             READY, SCHEDULED -> {
                 state.loadingState = Initializing
                 state.errorsForCurrentRequest.clear()
@@ -300,6 +295,8 @@ actual class WebViewNavigator actual constructor(private val coroutineScope: Cor
     fun stopLoading() {
         coroutineScope.launch { navigationEvents.emit(NavigationEvent.STOP_LOADING) }
     }
+
+
 }
 
 /**

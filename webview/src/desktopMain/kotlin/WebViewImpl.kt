@@ -1,5 +1,8 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.sun.webkit.network.CookieManager
+import java.net.URI
+import javafx.scene.web.WebView
 
 
 @Composable
@@ -16,3 +19,4 @@ internal actual fun WebViewImpl(
 
     })
 }
+

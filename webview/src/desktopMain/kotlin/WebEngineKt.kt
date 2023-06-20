@@ -1,10 +1,9 @@
 import java.net.CookieHandler
 import java.net.URI
-import java.util.*
 import javafx.scene.web.WebEngine
 import javafx.scene.web.WebView
 import kotlin.collections.HashMap
-import kotlin.collections.LinkedHashMap
+
 
 
 fun WebView.load(url: String) {
@@ -49,31 +48,23 @@ fun WebView.executeScript(script: String) {
 }
 
 
-fun WebView.setCookie(url: String) {
-    println("setCookie")
-    kotlin.runCatching {
-        val uri: URI = URI.create(url)
-        DataStoreKit.getFirstBlock(uri.host, setOf<String>()).let {
-
-
-            val headers: MutableMap<String, List<String>> = LinkedHashMap()
-            headers["Set-Cookie"] = it.toList()
-            println("url:$uri\n${it.toString()}")
-            CookieHandler.getDefault().put(uri, headers)
-        }
-    }
+/**
+ * Set cookie
+ * 需要再加载之前设置，才有效果
+ * It needs to be set before loading to have an effect
+ * @param url
+ * @param headers
+ */
+fun WebView.setCookie(url: String, headers: HashMap<String, List<String>>) {
+    val uri: URI = URI.create(url)
+    CookieHandler.getDefault().put(uri, headers)
 }
 
 
-fun WebView.getCookies() {
-    println("getCookies")
+fun WebView.getCookies(): MutableMap<String, MutableList<String>>? {
     val cookieHandler = CookieHandler.getDefault()
     val uri = URI.create(engine.location)
-    val mutableMap = cookieHandler.get(uri, HashMap<String, List<String>>())
-    mutableMap["Cookie"]?.let {
-        println("url:${uri.host}\n$it")
-        DataStoreKit.saveBlock(uri.host,it.toSet())
-    }
+    return cookieHandler.get(uri, HashMap())
 }
 
 

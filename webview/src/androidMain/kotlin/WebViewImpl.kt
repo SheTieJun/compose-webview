@@ -13,3 +13,4 @@ internal actual fun WebViewImpl(
         it.destroy()
     })
 }
+

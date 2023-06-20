@@ -5,6 +5,8 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import java.net.CookieHandler
+import java.net.URI
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -23,6 +25,14 @@ internal expect fun WebViewImpl(
     modifier: Modifier = Modifier,
     navigator: WebViewNavigator
 )
+
+
+expect object CookieManagerCompat{
+
+     fun setCookie(url: String,  headers: HashMap<String, String>)
+
+     fun getCookie(uri: URI): MutableMap<String, String>?
+}
 
 
 expect class WebViewError
@@ -82,6 +92,10 @@ expect fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = nul
 
 /**
  * WebViewNavigator control WebView
+ * - fun navigateBack()
+ * - fun navigateForward()
+ * - fun reload()
+ * - fun stopLoading()
  */
 @Composable
  fun rememberWebViewNavigator(
